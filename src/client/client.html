@@ -1,0 +1,125 @@
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<script type="text/javascript" charset="utf-8">
+	// if you using node.js
+	// https://github.com/websockets/ws
+
+	// if you using default ws
+	// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+
+  var enc = new TextEncoder('utf-8'); // always utf-8
+  // var a = enc.encode('我')
+  // console.log(a);
+  // console.log(new TextDecoder("utf-8").decode(a))
+  // console.log(decodeURIComponent(escape("我")))
+
+  var ws = new WebSocket('ws://localhost:6001')
+
+  // if you want to use blob
+  // Example for extracting data from a Blob
+  // https://developer.mozilla.org/en-US/docs/Web/API/Blob
+  ws.binaryType = "arraybuffer";
+
+  // ws read/write example:
+  // https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications
+  // https://www.tutorialspoint.com/websockets/websockets_send_receive_messages.htm
+
+  function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint16Array(buf));
+  }
+
+  function str2ab(str) {
+    var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
+    var bufView = new Uint16Array(buf);
+    for (var i = 0, strLen = str.length; i < strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
+  }
+
+  var num = 32767
+  var arr = new Uint16Array([129]);
+  console.log(num.toString(16));
+
+  ws.onopen = function() {
+    console.log("send message")
+    //Send Hello message
+    // ws.send(('0000' + cmd.toString(16).toUpperCase()).slice(-4) + JSON.stringify({Hello: {
+    //     Name: 'leaf'
+    // }}))
+
+    // ws.send(enc.encode(JSON.stringify({Hello: {
+    //     Name: '我'
+    // }})))
+
+    var cmd = new Uint8Array([num & 0xff, num >> 8 & 0xff])
+    var data = enc.encode(JSON.stringify({
+      Hello: {
+        Name: '我'
+      }
+    }))
+
+    var c = new Uint8Array(cmd.length + data.length);
+    c.set(cmd);
+    c.set(data, cmd.length);
+
+    ws.send(c)
+  }
+
+
+  ws.onmessage = function(msgevent) {
+    // var msg = JSON.parse(msgevent.data);
+    // console.log('in :', msg);
+    // message received, do something
+
+    // console.log(msgevent.data);
+
+    // ref: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+    var byteArray = new Uint8Array(msgevent.data)
+    console.log(byteArray);
+  };
+
+  // ref:
+  // https://github.com/websockets/ws
+
+  // test:
+  // https://jsfiddle.net/
+  // http://www.webtoolkitonline.com/javascript-tester.html
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString
+
+  // how about blob:
+  // https://stackoverflow.com/questions/5515869/string-length-in-bytes-in-javascript
+
+  // https://github.com/websockets/ws#sending-binary-data
+
+  // this is very important:
+  // http://2ality.com/2013/09/javascript-unicode.html (header should tell the browser we are using utf8)
+  // \u4E00
+  // http://monsur.hossa.in/2012/07/20/utf-8-in-javascript.html
+
+  // text-encoding
+  // https://github.com/inexorabletash/text-encoding
+  // https://encoding.spec.whatwg.org/#utf-8-encoder
+
+  // Receiving binary data using JavaScript typed arrays
+  // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
+
+  // blob
+  // https://developer.mozilla.org/en-US/docs/Web/API/Blob
+
+  // convert number to 16 digit hex with leading zeros
+  // https://stackoverflow.com/questions/9909038/formatting-hexadecimal-number-in-javascript
+  // https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
+
+  // protobuf
+  // https://github.com/dcodeIO/protobuf.js/issues/689
+
+  // stringview
+  // https://developer.mozilla.org/en-US/docs/Archive/Add-ons/Code_snippets/StringView
+  // https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder
+
+  // good
+  // https://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
+</script>

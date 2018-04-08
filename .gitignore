@@ -1,0 +1,6 @@
+bin/*
+pkg/
+src/github.com/
+#https://gopkg.in/mgo.v2
+src/gopkg.in
+
