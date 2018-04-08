@@ -24,7 +24,7 @@ func Run(mods map[string]module.Module) {
 		defer logger.Close()
 	}
 
-	log.Release("Leaf %v starting up", 1.0)
+	log.Release("LPGE %v starting up", 1.0)
 
 	// module
 	for k, v := range mods {
@@ -42,7 +42,7 @@ func Run(mods map[string]module.Module) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
 	sig := <-c
-	log.Release("Leaf closing down (signal: %v)", sig)
+	log.Release("LPGE closing down (signal: %v)", sig)
 	//console.Destroy()
 	//cluster.Destroy()
 	module.Destroy()
