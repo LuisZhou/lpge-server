@@ -1,4 +1,6 @@
-bin/*
+bin/server
+bin/client
+bin/protoc-gen-go
 pkg/
 src/github.com/
 #https://gopkg.in/mgo.v2
