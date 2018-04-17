@@ -1,15 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"github.com/LuisZhou/lpge/conf"
 	"github.com/LuisZhou/lpge/gate"
 	"github.com/LuisZhou/lpge/log"
 	"github.com/LuisZhou/lpge/module"
 	"os"
 	"os/signal"
+	sconf "server/conf"
 	server_gate "server/gate"
-	"time"
 )
 
 //func Run(mods ...module.Module) {
@@ -30,7 +29,6 @@ func Run(mods map[string]module.Module) {
 	for k, v := range mods {
 		module.Register(v, k)
 	}
-	//module.Init()
 
 	// cluster
 	//cluster.Init()
@@ -49,15 +47,22 @@ func Run(mods map[string]module.Module) {
 }
 
 func main() {
-	fmt.Println(conf.LenStackBuf)
+	conf.LogLevel = sconf.Server.LogLevel
+	conf.LogPath = sconf.Server.LogPath
+	conf.LogFlag = sconf.LogFlag
+	conf.ConsolePort = sconf.Server.ConsolePort
+	conf.ProfilePath = sconf.Server.ProfilePath
+
+	log.Debug(sconf.Server.TCPAddr)
+
 	_gate := &gate.Gate{
-		MaxConnNum:      2,
-		PendingWriteNum: 20,
-		MaxMsgLen:       4096, // todo: double check.
-		HTTPTimeout:     10 * time.Second,
-		TCPAddr:         "0.0.0.0:3563",
-		WSAddr:          "0.0.0.0:6001",
-		LittleEndian:    true,
+		MaxConnNum:      sconf.Server.MaxConnNum,
+		PendingWriteNum: sconf.PendingWriteNum,
+		MaxMsgLen:       sconf.MaxMsgLen,
+		HTTPTimeout:     sconf.HTTPTimeout,
+		TCPAddr:         sconf.Server.TCPAddr,
+		WSAddr:          sconf.Server.WSAddr,
+		LittleEndian:    sconf.LittleEndian,
 		NewWsAgent:      server_gate.NewWsAgent,
 		NewTcpAgent:     server_gate.NewTcpAgent,
 	}
