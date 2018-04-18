@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"github.com/LuisZhou/lpge/conf"
 	"log"
 	"time"
 )
@@ -16,14 +17,30 @@ var (
 	LenMsgLen              = 2
 	LittleEndian           = true
 
-	// todo: seperate to three catalog:
-	// 1. gate
-	// 2. agent
-	// 3. function module.
+	// gate conf
+	GateConfig = conf.ModuleConfig{
+		GoLen:              10,
+		TimerDispatcherLen: 10,
+		AsynCallLen:        10,
+		ChanRPCLen:         10,
+		TimeoutAsynRet:     10,
+	}
 
-	// skeleton conf
-	GoLen              = 10000
-	TimerDispatcherLen = 10000
-	AsynCallLen        = 10000
-	ChanRPCLen         = 10000
+	// agent config
+	AgentConfig = conf.ModuleConfig{
+		GoLen:              10,
+		TimerDispatcherLen: 10,
+		AsynCallLen:        100,
+		ChanRPCLen:         100,
+		TimeoutAsynRet:     10,
+	}
+
+	// function module config
+	FunctionConfig = conf.ModuleConfig{
+		GoLen:              10,
+		TimerDispatcherLen: 10,
+		AsynCallLen:        1000,
+		ChanRPCLen:         1000,
+		TimeoutAsynRet:     10,
+	}
 )

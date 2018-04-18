@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"github.com/LuisZhou/lpge/log"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 var Server struct {
@@ -19,7 +21,10 @@ var Server struct {
 }
 
 func init() {
-	data, err := ioutil.ReadFile("conf/server.json")
+	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	log.Debug(dir)
+
+	data, err := ioutil.ReadFile(dir + "/conf/server.json")
 	if err != nil {
 		log.Fatal("%v", err)
 	}

@@ -53,6 +53,10 @@ func main() {
 	conf.ConsolePort = sconf.Server.ConsolePort
 	conf.ProfilePath = sconf.Server.ProfilePath
 
+	conf.GateConfig = sconf.GateConfig
+	conf.AgentConfig = sconf.AgentConfig
+	conf.FunctionConfig = sconf.FunctionConfig
+
 	log.Debug(sconf.Server.TCPAddr)
 
 	_gate := &gate.Gate{
