@@ -13,7 +13,8 @@ elif [ "$1" == "compile" ] ; then
 	go install server
 else
 	go get -u github.com/go-sql-driver/mysql
+	go get -u github.com/jinzhu/inflection
 	go get -u github.com/golang/protobuf/protoc-gen-go
-	go get github.com/LuisZhou/lpge/
+	go get -u github.com/LuisZhou/lpge/
 	go install server
 fi
