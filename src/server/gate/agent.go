@@ -8,7 +8,22 @@ import (
 
 var (
 	Processor network.Processor
+	handlers  map[interface{}]interface{}
 )
+
+func init() {
+	handlers = make(map[interface{}]interface{})
+	// the first parameter must the agent.
+	handlers[uint16(1)] = func(args []interface{}) (ret interface{}, err error) {
+		return nil, nil
+	}
+
+	person := &protobuf.Person{}
+	person.Name = "abc"
+
+	Processor = protobuf.NewProtobufProcessor()
+	Processor.Register(1, protobuf.Person{})
+}
 
 type NewAgent struct {
 	gate.AgentTemplate
@@ -17,7 +32,7 @@ type NewAgent struct {
 func NewWsAgent(conn network.Conn, gate *gate.Gate) network.Agent {
 	a := &NewAgent{}
 	a.Init(conn, gate)
-	// add listener here
+	a.Skeleton.SetChanRPCHandlers(handlers)
 	a.Processor = Processor
 	return a
 }
@@ -25,17 +40,7 @@ func NewWsAgent(conn network.Conn, gate *gate.Gate) network.Agent {
 func NewTcpAgent(conn network.Conn, gate *gate.Gate) network.Agent {
 	a := &NewAgent{}
 	a.Init(conn, gate)
-	a.Skeleton.RegisterChanRPC(uint16(1), func(args []interface{}) (ret interface{}, err error) {
-		return nil, nil
-	})
+	a.Skeleton.SetChanRPCHandlers(handlers)
 	a.Processor = Processor
 	return a
-}
-
-func init() {
-	person := &protobuf.Person{}
-	person.Name = "abc"
-
-	Processor = protobuf.NewProtobufProcessor()
-	Processor.Register(1, protobuf.Person{})
 }

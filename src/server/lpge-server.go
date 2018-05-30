@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/LuisZhou/lpge/conf"
+	"github.com/LuisZhou/lpge/console"
 	"github.com/LuisZhou/lpge/gate"
 	"github.com/LuisZhou/lpge/log"
 	"github.com/LuisZhou/lpge/module"
@@ -11,7 +12,6 @@ import (
 	server_gate "server/gate"
 )
 
-//func Run(mods ...module.Module) {
 func Run(mods map[string]module.Module) {
 	// logger
 	if conf.LogLevel != "" {
@@ -34,14 +34,14 @@ func Run(mods map[string]module.Module) {
 	//cluster.Init()
 
 	// console
-	//console.Init()
+	console.Init()
 
 	// close
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
 	sig := <-c
 	log.Release("LPGE closing down (signal: %v)", sig)
-	//console.Destroy()
+	console.Destroy()
 	//cluster.Destroy()
 	module.Destroy()
 }
