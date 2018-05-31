@@ -21,8 +21,10 @@ func init() {
 	handlers = make(map[interface{}]interface{})
 	// the first parameter must the agent.
 	handlers[uint16(1)] = func(args []interface{}) (ret interface{}, err error) {
-		fmt.Println(args[0])
 		a := args[0].(*gate.AgentTemplate)
+		p := args[1].(*protobuf.Person)
+
+		fmt.Println(a, p)
 		a.WriteMsg(uint16(2), args[1])
 		return nil, nil
 	}

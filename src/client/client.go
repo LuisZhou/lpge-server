@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "encoding/binary"
-	_ "fmt"
+	"fmt"
 	"github.com/LuisZhou/lpge/network"
 	"github.com/LuisZhou/lpge/network/processor/protobuf"
 	"net"
@@ -23,8 +23,8 @@ func main() {
 	//        }
 	//    }`)
 
-	parser_l := network.NewMsgParser()
-	parser_l.SetByteOrder(true)
+	msgParser := network.NewMsgParser()
+	msgParser.SetByteOrder(true)
 
 	person := &protobuf.Person{}
 	person.Name = "abc"
@@ -50,7 +50,11 @@ func main() {
 	// // Send message
 	// conn.Write(m)
 
-	parser_l.Write(conn, 1, data)
+	msgParser.Write(conn, 1, data)
+
+	cmd, ret, err2 := msgParser.Read(conn)
+
+	fmt.Println(cmd, ret, err2)
 
 	time.Sleep(time.Second * 5)
 
